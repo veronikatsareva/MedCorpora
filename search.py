@@ -2,6 +2,7 @@ import re
 import pandas as pd
 from pymystem3 import Mystem
 from collections import defaultdict
+from itertools import chain
 
 
 def reg_from_req(request: str) -> str | None:
@@ -233,13 +234,12 @@ class RegexDF:
         dict_lemmas = defaultdict(int)
         dict_poses = defaultdict(int)
         # проходим по всем отмеченным в текстах вхождениям
-        for value in self.matchesall().values():
-            for match in value:
-                # делим информацию и подсчитываем
-                words, lemmas, poses = RegexDF.split_words_info(match)
-                dict_words[words] += 1
-                dict_lemmas[lemmas] += 1
-                dict_poses[poses] += 1
+        for match in chain.from_iterable(self.matchesall().values()):
+            # делим информацию и подсчитываем
+            words, lemmas, poses = RegexDF.split_words_info(match)
+            dict_words[words] += 1
+            dict_lemmas[lemmas] += 1
+            dict_poses[poses] += 1
         # сортируем
         top_words = sorted(dict_words.items(), key=lambda item: item[1], reverse=True)[:100]
         top_lemmas = sorted(dict_lemmas.items(), key=lambda item: item[1], reverse=True)[:100]
