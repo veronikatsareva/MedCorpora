@@ -8,3 +8,5 @@ pip==24.2
 setuptools==60.2.0
 werkzeug==3.0.4
 wheel==0.37.1
+pandas~=2.2.3
+pymystem3~=0.2.0
