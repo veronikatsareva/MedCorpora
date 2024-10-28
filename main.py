@@ -18,6 +18,8 @@ def results(name=None):
 
     # обработка запроса
     regex = search.reg_from_req(query)
+    if not regex:
+        return handle_error()
 
     # преобразование запроса в регулярное выражение
     regex_df = search.RegexDF(regex)
