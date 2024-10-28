@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, redirect
 import search
-import os
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+# пустые представители своего класса для глобальных переменных
+query = ''
+regex_df = search.RegexDF('+++')
 
 
 @app.route('/')
@@ -13,72 +15,56 @@ def main():
 
 @app.route('/results', methods=['POST'])
 def results(name=None):
+    global query, regex_df
     query = request.form.get('query')
-    session['query'] = query
-
-    # обработка запроса
-    regex = search.reg_from_req(query)
-    if not regex:
-        return handle_error()
 
     # преобразование запроса в регулярное выражение
-    regex_df = search.RegexDF(regex)
+    regex = search.reg_from_req(query)
 
-    # результаты запроса
-    results = regex_df.pretty_print()
+    # проверяем, что вернулось не None
+    if regex:
+        # обрабатываем базу регуляркой
+        regex_df = search.RegexDF(regex)
 
-    if results:
-        all_texts = len(results)
-        all_examples = sum(len(values) for values in results.values())
+        # результаты запроса
+        res = regex_df.pretty_print()
 
-        # сбор статистики по запросу
-        tokens, lemmas, pos = regex_df.freq_dicts()
+        # что-то нашлось
+        if res:
+            all_texts = len(res)
+            all_examples = sum(len(values) for values in res.values())
 
-        session['lemmas'] = lemmas
-
-        session['tokens'] = tokens
-
-        session['pos'] = pos
-
-        try:
-            regex_df.download_csv()
-        except RuntimeError:
-            handle_error()
-
-        csv_file_path = 'static/corpora_content.csv'
-        file_exists = os.path.isfile(csv_file_path)
-
-        return render_template('results.html',
-                               name=name,
-                               results=results,
-                               query=query,
-                               all_texts=all_texts,
-                               all_examples=all_examples,
-                               lemmas=lemmas,
-                               tokens=tokens,
-                               pos=pos,
-                               file_exists=file_exists)
+            return render_template('results.html',
+                                   name=name,
+                                   results=res,
+                                   query=query,
+                                   all_texts=all_texts,
+                                   all_examples=all_examples)
+        else:
+            return render_template('no_result.html',
+                                   name=name,
+                                   query=query)
     else:
-        return render_template('no_result.html',
-                               name=name,
-                               query=query)
+        return handle_error()
 
 
 @app.route('/download')
 def download():
-    csv_file_path = 'static/corpora_content.csv'
-    if not os.path.isfile(csv_file_path):
-        return redirect(url_for('handle_error'))
-
-    return redirect(csv_file_path)
+    global regex_df
+    try:
+        # создаем и скачиваем файл
+        regex_df.download_csv()
+        csv_file_path = 'static/corpora_content.csv'
+        return redirect(csv_file_path)
+    except RuntimeError:
+        return handle_error()
 
 
 @app.route('/statistics')
 def statistics():
-    query = session.get('query')
-    lemmas = session.get('lemmas')
-    tokens = session.get('tokens')
-    pos = session.get('pos')
+    global query, regex_df
+    # выводим статистику
+    tokens, lemmas, pos = regex_df.freq_dicts()
     return render_template('statistics.html',
                            query=query,
                            lemmas=lemmas,
