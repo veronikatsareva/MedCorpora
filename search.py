@@ -12,7 +12,8 @@ def reg_from_req(request: str) -> str | None:
     """
     # разрешенные теги
     tags = ['adj', 'adv', 'intj', 'noun', 'propn', 'verb', 'adp', 'aux', 'cconj', 'det', 'num', 'part', 'pron', 'sconj']
-    parts = request.lower().split()
+    request = request.lower()
+    parts = request.split()
     # рекурсия, если в запросе несколько слов
     if len(parts) > 1:
         return ' '.join(reg_from_req(part) for part in parts)
