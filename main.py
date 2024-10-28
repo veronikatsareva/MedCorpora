@@ -30,7 +30,7 @@ def results(name=None):
         all_examples = sum(len(values) for values in results.values())
 
         # сбор статистики по запросу
-        lemmas, tokens, pos = regex_df.freq_dicts()
+        tokens, lemmas, pos = regex_df.freq_dicts()
 
         session['lemmas'] = lemmas
 
@@ -89,7 +89,7 @@ def help_page():
     return render_template('help.html')
 
 
-@app.errorhandler(Exception)
+@app.errorhandler(RuntimeError)
 def handle_error():
     return render_template('errors.html')
 
