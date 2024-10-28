@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %} Ошибка {% endblock %}
+
+{% block content %}
+<section class="content">
+<div class="information-no-result">
+    <p class="errors">Что-то пошло не так. Попробуйте повторить ваш запрос!</p>
+    <br>
+    <button class="button" style="width: 400px; margin-top: 20px;" onclick="window.location='/'">
+        <i class="fas fa-arrow-left" title="Вернуться на главную страницу"></i> Вернуться на главную страницу
+    </button>
+</div>
+</section>
+{% endblock %}
+

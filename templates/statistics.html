@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Статистика по запросу{% endblock %}
+
+{% block content %}
+<section class="content">
+<div class="information" style="padding-bottom: 10px; padding-left: 20px;">
+    <h1>Статистика по запросу</h1><h1 class="query"> {{ query }}</h1>
+    <br>
+
+<div class="statistics-wrapper">
+    <div class="statistics-container" style="margin-right: 25px;">
+        <h4 style="text-align: center">Леммы</h4>
+        <hr class="hr-line" style="margin: 10px 0;">
+        <ul class="statistics-ul">
+            {% for key, value in lemmas.items() %}
+                <li><p>{{ key }} — <b>{{ value }}</b></p></li>
+                <hr class="hr-line" style="margin: 10px 0;">
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="statistics-container" style="margin-right: 25px;">
+        <h4 style="text-align: center">Токены</h4>
+        <hr class="hr-line" style="margin: 10px 0;">
+        <ul class="statistics-ul">
+            {% for key, value in tokens.items() %}
+                <li><p>{{ key }} — <b>{{ value }}</b></p></li>
+                <hr class="hr-line" style="margin: 10px 0;">
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="statistics-container">
+        <h4 style="text-align: center">Части речи</h4>
+        <hr class="hr-line" style="margin: 10px 0;">
+        <ul class="statistics-ul">
+            {% for key, value in pos.items() %}
+                <li><p>{{ key }} — <b>{{ value }}</b></p></li>
+                <hr class="hr-line" style="margin: 10px 0;">
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+
+</div>
+
+</section>
+
+
+{% endblock %}

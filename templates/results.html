@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %} Результаты {% endblock %}
+
+{% block content %}
+<section class="content">
+<div class="information" style="background-color: #FFD6DF; padding-bottom: 10px;">
+    <h1>Результаты поиска по запросу <p class="query">{{ query }}</p>:</h1>
+    <br>
+    <p>Всего текстов: {{ all_texts }} | Всего примеров: {{ all_examples }}</p>
+    <br>
+    <button class="button small-button" onclick="window.location='/download'">
+        <i class="fas fa-download" title="Скачать в формате CSV"></i>
+    </button>
+    <button class="button small-button" onclick="window.location='/statistics'">
+        <i class="fas fa-chart-bar" title="Посмотреть статистику по запросу"></i>
+    </button>
+    <button class="button small-button" onclick="window.location='/'">
+        <i class="fas fa-arrow-left" title="Вернуться на главну страницу"></i>
+    </button>
+</div>
+
+{% for key, values in results.items() %}
+    <div class="information sentence">
+        <p class="result-options" style="font-weight: 550;">{{ key }}</p>
+        <br>
+        <p class="result-options">{{ values[0][3] }}</p>
+        <button class="button copy-button small-button" data-text="{{ key }} [{{ values[0][3] }}]">
+            <i class="fas fa-copy" title="Скопировать пример"></i>
+        </button>
+        <button class="button small-button" onclick="window.location='{{ values[0][4] }}'">
+            <i class="fas fa-book" title="Полный текст"></i>
+        </button>
+        <hr class="hr-line">
+        <ol>
+        {% for left, target, right, source, link in values %}
+            <div class="result-item" style="display: none;">
+                <li class="result-options">
+                    {{ left }}<b>{{ target }}</b>{{ right }}
+                </li>
+            </div>
+        {% endfor %}
+        </ol>
+
+        <button class="button more-details">Показать разборы</button>
+    </div>
+{% endfor %}
+</section>
+
+<script>
+    document.querySelectorAll('.more-details').forEach(button => {
+        button.addEventListener('click', function() {
+            const resultItems = this.parentElement.querySelectorAll('.result-item');
+            resultItems.forEach(item => {
+                item.style.display = item.style.display === 'none' ? 'block' : 'none';
+            });
+            this.textContent = this.textContent === 'Показать разборы' ? 'Скрыть разборы' : 'Показать разборы';
+        });
+    });
+
+    document.querySelectorAll('.copy-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const textToCopy = this.getAttribute('data-text');
+            navigator.clipboard.writeText(textToCopy).then(() => {
+            }).catch(err => {
+                console.error('Ошибка при копировании текста:', err);
+            });
+        });
+    });
+
+    function downloadFile(fileName, filePath) {
+        const link = document.createElement('a');
+        link.href = filePath;
+        link.download = fileName;
+
+        document.body.appendChild(link);
+        link.click();
+
+        document.body.removeChild(link);
+    }
+</script>
+
+{% endblock %}

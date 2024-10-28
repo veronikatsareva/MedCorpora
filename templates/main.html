@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %} Главная страница {% endblock %}
+
+{% block content %}
+<section class="content">
+<div class="information">
+    <h1>MedCorpora — </h1>
+    <p style="font-size: 25px;">коллекция из </p><p style="font-size: 25px; font-weight: bold; color: #FF476F;">10 тысяч</p><p style="font-size: 25px;"> предложений на русском языке общим объемом около </p><p style="font-size: 25px; font-weight: bold; color: #FF476F;">145 тысяч</p><p style="font-size: 25px;"> словоупотреблений, оснащенная частеречной разметкой и поиском.</p>
+    <br>
+    <div class="form-box">
+        <form action="/results" method="post">
+            <label for="query">Введите Ваш запрос:</label>
+            <br>
+            <input class="input" type="text" name="query" id="query" placeholder="люблю NOUN">
+            <button class=" button button-form" type="submit">Найти</button>
+        </form>
+        </div>
+</div>
+</section>
+
+{% endblock %}

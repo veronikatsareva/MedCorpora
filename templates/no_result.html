@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %} Результаты {% endblock %}
+
+{% block content %}
+<section class="content">
+<div class="information-no-result">
+    <p class="no-result">По запросу </p> <p class="query" style="font-size: 20px;">{{ query }}</p><p class="no-result"> ничего не найдено.</p>
+    <br>
+    <button class="button" style="width: 400px; margin-top: 20px;" onclick="window.location='/'">
+        <i class="fas fa-arrow-left" title="Вернуться на главную страницу"></i> Вернуться на главную страницу
+    </button>
+</div>
+</section>
+{% endblock %}

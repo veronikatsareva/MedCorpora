@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://code.s3.yandex.net/web-code/fonts/fonts.css"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  </head>
+  <body>
+    <nav class="navbar">
+      <a class="navbar-brand" href="/">MedCorpora</a>
+      <a class="nav-link" href="/">Главная страница</a>
+      <a class="nav-link" href="/help">Помощь по запросу</a>
+    </nav>
+    {% block content %} {% endblock %}
+    <footer class="footer">
+      <h4 class="footer-author">© Вероника Царева, Дмитрий Волянский, Анна Луценко</h4>
+    </footer>
+  </body>
+</html>
