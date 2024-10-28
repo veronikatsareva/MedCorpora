@@ -218,7 +218,7 @@ class RegexDF:
 
         # создание файла для скачивания
         df = pd.DataFrame.from_dict(result)
-        df.to_csv('corpora_content.csv')
+        df.to_csv('static/corpora_content.csv')
 
         return 0
 
