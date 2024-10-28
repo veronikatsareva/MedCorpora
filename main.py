@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for
+import search
 import os
 
 app = Flask(__name__)
@@ -15,22 +16,32 @@ def results(name=None):
     query = request.form.get('query')
     session['query'] = query
 
-    # Обработайте запрос и верните results
-    results = None
+    # обработка запроса
+    regex = search.reg_from_req(query)
+
+    # преобразование запроса в регулярное выражение
+    regex_df = search.RegexDF(regex)
+
+    # результаты запроса
+    results = regex_df.pretty_print()
 
     if results:
         all_texts = len(results)
         all_examples = sum(len(values) for values in results.values())
 
-        # Заполните переменные lemmas, tokens и pos
-        lemmas = None
+        # сбор статистики по запросу
+        lemmas, tokens, pos = regex_df.freq_dicts()
+
         session['lemmas'] = lemmas
 
-        tokens = None
         session['tokens'] = tokens
 
-        pos = None
         session['pos'] = pos
+
+        try:
+            regex_df.download_csv()
+        except RuntimeError:
+            handle_error()
 
         csv_file_path = 'static/corpora_content.csv'
         file_exists = os.path.isfile(csv_file_path)
