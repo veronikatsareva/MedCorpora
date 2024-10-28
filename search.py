@@ -119,7 +119,7 @@ class RegexDF:
             # для неразмеченного актуальны только словоформы
             words = RegexDF.split_words_info(match)[0]
             # слова в тексте разделяются несловными символами (', ', '-')
-            regex_words = r'\b' + r'\W+?'.join(words.split()) + r'\b'
+            regex_words = r'\b' + r'\W*?'.join(words.split()) + r'\b'
             for i in re.finditer(regex_words, text, flags=re.IGNORECASE):
                 # одно словоформа может встречаться несколько раз, берем один
                 if i.span() not in found:
