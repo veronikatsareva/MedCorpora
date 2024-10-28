@@ -17,19 +17,19 @@ def reg_from_req(request: str) -> str | None:
     # рекурсия, если в запросе несколько слов
     if len(parts) > 1:
         return ' '.join(reg_from_req(part) for part in parts)
-    # одно слово
+    # одно слово (везде следим, что начинается не с части слова)
     elif len(parts) == 1:
         # "слово" -> слово+буквы(с дефисом)+буквы
         if request[0] == request[-1] == '"':
             request = request[1:len(request) - 1]
-            return fr'{request}\+[\w\-]+\+\w+'
+            return fr'\b{request}\+[\w\-]+\+\w+'
         # tag -> буквы(с дефисом)+буквы(с дефисом)+tag
         elif request in tags:
-            return fr'[\w\-]+\+[\w\-]+\+{request}'
+            return fr'\b[\w\-]+\+[\w\-]+\+{request}'
         # слово+tag -> буквы(с дефисом)+слово+tag
         elif '+' in request:
             request = request.replace('+', r'\+')
-            return fr'[\w\-]+\+{request}'
+            return fr'\b[\w\-]+\+{request}'
         # слово (и всякий мусор, по которому ничего не найдется: NOIN...) ->
         # буквы(с дефисом)+лемма(от слово)+буквы
         else:
@@ -37,7 +37,7 @@ def reg_from_req(request: str) -> str | None:
             words = mystem.lemmatize(request)
             # проверяем что это одно слово (уберет запрос скажи-ка)
             if len(words) == 2:
-                return fr'[\w\-]+\+{words[0]}\+\w+'
+                return fr'\b[\w\-]+\+{words[0]}\+\w+'
 
 
 class RegexDF:
@@ -73,8 +73,8 @@ class RegexDF:
         :returns: список строк в формате 'слово+лемма+тег'.
         """
         text = self.df['Разбор'][index]
-        # разрешаем пересечение, но следим, чтобы начало было несловным
-        return re.findall(fr'(?=(\b{self.regex}))', text)
+        # разрешаем пересечение (уже знаем, что начало не часть слова)
+        return re.findall(fr'(?=({self.regex}))', text)
 
     def matchesbatch(self, indexes: list) -> dict:
         """
@@ -223,10 +223,10 @@ class RegexDF:
 
         return 0
 
-    def freq_dicts(self) -> tuple[dict, dict, dict]:
+    def freq_dicts(self) -> tuple[list, list, list]:
         """
-        Находит самые частые заполнители для вхождений, отдельно по каждому из параметров для слов (форма, лемма, тег).
-        :returns: три частотных словаря (для слов, лемм и тегов).
+        Находит топ100 частых заполнители для вхождений, отдельно по каждому из параметров для слов (форма, лемма, тег).
+        :returns: три списка кортежей (слово, частотность); (лемма, частотность) и (тег, частотность).
         """
         # создаем defaultdict для каждого из трех параметров
         dict_words = defaultdict(int)
@@ -241,10 +241,7 @@ class RegexDF:
                 dict_lemmas[lemmas] += 1
                 dict_poses[poses] += 1
         # сортируем
-        dict_words = dict(sorted(dict_words.items(),
-                                 key=lambda item: item[1], reverse=True))
-        dict_lemmas = dict(sorted(dict_lemmas.items(),
-                                  key=lambda item: item[1], reverse=True))
-        dict_poses = dict(sorted(dict_poses.items(),
-                                 key=lambda item: item[1], reverse=True))
-        return dict_words, dict_lemmas, dict_poses
+        top_words = sorted(dict_words.items(), key=lambda item: item[1], reverse=True)[:100]
+        top_lemmas = sorted(dict_lemmas.items(), key=lambda item: item[1], reverse=True)[:100]
+        top_poses = sorted(dict_poses.items(), key=lambda item: item[1], reverse=True)[:100]
+        return top_words, top_lemmas, top_poses

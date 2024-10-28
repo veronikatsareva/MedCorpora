@@ -9,11 +9,11 @@
     <br>
 
 <div class="statistics-wrapper">
-    <div class="statistics-container" style="margin-right: 25px;">
-        <h4 style="text-align: center">Леммы</h4>
+        <div class="statistics-container" style="margin-right: 25px;">
+        <h4 style="text-align: center">Токены</h4>
         <hr class="hr-line" style="margin: 10px 0;">
         <ul class="statistics-ul">
-            {% for key, value in lemmas.items() %}
+            {% for key, value in tokens %}
                 <li><p>{{ key }} — <b>{{ value }}</b></p></li>
                 <hr class="hr-line" style="margin: 10px 0;">
             {% endfor %}
@@ -21,10 +21,10 @@
     </div>
 
     <div class="statistics-container" style="margin-right: 25px;">
-        <h4 style="text-align: center">Токены</h4>
+        <h4 style="text-align: center">Леммы</h4>
         <hr class="hr-line" style="margin: 10px 0;">
         <ul class="statistics-ul">
-            {% for key, value in tokens.items() %}
+            {% for key, value in lemmas %}
                 <li><p>{{ key }} — <b>{{ value }}</b></p></li>
                 <hr class="hr-line" style="margin: 10px 0;">
             {% endfor %}
@@ -35,7 +35,7 @@
         <h4 style="text-align: center">Части речи</h4>
         <hr class="hr-line" style="margin: 10px 0;">
         <ul class="statistics-ul">
-            {% for key, value in pos.items() %}
+            {% for key, value in pos %}
                 <li><p>{{ key }} — <b>{{ value }}</b></p></li>
                 <hr class="hr-line" style="margin: 10px 0;">
             {% endfor %}
