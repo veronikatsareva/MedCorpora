@@ -181,10 +181,10 @@ class RegexDF:
                 )
         return to_print
 
-    def download_csv(self) -> int:
+    def download_csv(self) -> datetime:
         """
         Создание csv-файла для скачивания по результатам запроса.
-        :returns: 0 при завершении работы.
+        :returns: id файла (дата создания запроса).
         """
 
         # словарь для будущего датафрейма
