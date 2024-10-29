@@ -22,13 +22,14 @@
 
 {% for key, values in results.items() %}
     <div class="information sentence">
-        <p class="result-options" style="font-weight: 550;">{{ key }}</p>
+        <p class="result-options" style="font-weight: bold">{{ key }}</p>
         <br>
         <p class="result-options">{{ values[0][3] }}</p>
-        <button class="button copy-button small-button" data-text="{{ key }} [{{ values[0][3] }}]">
+        <br>
+        <button class="button copy-button small-button"  style="margin-top: 15px;" data-text="{{ key }} [{{ values[0][3] }}]">
             <i class="fas fa-copy" title="Скопировать пример"></i>
         </button>
-        <button class="button small-button" onclick="window.open('{{ values[0][4] }}', '_blank')">
+        <button class="button small-button" style="margin-top: 15px;"  onclick="window.open('{{ values[0][4] }}', '_blank')">
             <i class="fas fa-book" title="Полный текст"></i>
         </button>
         <hr class="hr-line">
