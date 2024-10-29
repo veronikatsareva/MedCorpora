@@ -3,6 +3,7 @@ import pandas as pd
 from pymystem3 import Mystem
 from collections import defaultdict
 from itertools import chain
+from datetime import datetime
 
 
 def reg_from_req(request: str) -> str | None:
@@ -219,10 +220,11 @@ class RegexDF:
                 result["Полный контекст"].append(sentence)
 
         # создание файла для скачивания
+        file_id = datetime.now()
         df = pd.DataFrame.from_dict(result)
-        df.to_csv('static/corpora_content.csv')
+        df.to_csv(f'static/corpora_content_{file_id}.csv')
 
-        return 0
+        return file_id
 
     def freq_dicts(self) -> tuple[list, list, list]:
         """
