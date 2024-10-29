@@ -82,7 +82,6 @@ body {
 .navbar {
   padding-top: 15px;
   padding-bottom: 15px;
-  display: block;
   height: 60px;
   background-color: #56429E;
 }
@@ -116,7 +115,6 @@ body {
 
 .information-help {
     border:  white;
-    justify-content: space-between;
 }
 
 .sentence {
@@ -127,9 +125,6 @@ body {
 
 .card {
   margin-bottom: 30px;
-  margin-left: 50px;
-  width: 1000px;
-  height: 150px;
   border:  2px solid #4D3C90;
   border-radius: 30px;
   padding: 15px 15px 20px;
