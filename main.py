@@ -53,8 +53,8 @@ def download():
     global regex_df
     try:
         # создаем и скачиваем файл
-        regex_df.download_csv()
-        csv_file_path = 'static/corpora_content.csv'
+        file_id = regex_df.download_csv()
+        csv_file_path = f'static/corpora_content_{file_id}.csv'
         return redirect(csv_file_path)
     except RuntimeError:
         return handle_error()
