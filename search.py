@@ -24,14 +24,14 @@ def reg_from_req(request: str) -> str | None:
         # "слово" -> слово+буквы(с дефисом)+буквы
         if request[0] == request[-1] == '"':
             request = request[1:len(request) - 1]
-            return fr'\b{request}\+[\w-]+\+\w+'
+            return fr'(?<!-)\b{request}\+[\w-]+\+\w+'
         # tag -> буквы(с дефисом)+буквы(с дефисом)+tag
         elif request in tags:
-            return fr'\b\w[\w-]*\+[\w-]+\+{request}'
+            return fr'(?<!-)\b\w[\w-]*\+[\w-]+\+{request}'
         # слово+tag -> буквы(с дефисом)+слово+tag
         elif '+' in request:
             request = request.replace('+', r'\+')
-            return fr'\b\w[\w-]*\+{request}'
+            return fr'(?<!-)\b\w[\w-]*\+{request}'
         # слово (и всякий мусор, по которому ничего не найдется: NOIN...) ->
         # буквы(с дефисом)+лемма(от слово)+буквы
         else:
@@ -39,7 +39,7 @@ def reg_from_req(request: str) -> str | None:
             words = mystem.lemmatize(request)
             # проверяем что это одно слово (уберет запрос скажи-ка)
             if len(words) == 2:
-                return fr'\b\w[\w-]*\+{words[0]}\+\w+'
+                return fr'(?<!-)\b\w[\w-]*\+{words[0]}\+\w+'
 
 
 class RegexDF:
@@ -76,7 +76,7 @@ class RegexDF:
         """
         text = self.df['Разбор'][index]
         # разрешаем пересечение (уже знаем, что начало не часть слова, проверяем что нет дефиса перед)
-        return re.findall(fr'(?<!-)(?=({self.regex}))', text)
+        return re.findall(fr'(?=({self.regex}))', text)
 
     def matchesbatch(self, indexes: list) -> dict:
         """
