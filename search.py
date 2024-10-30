@@ -144,7 +144,9 @@ class RegexDF:
         Находит индексы всех вхождений в тексты, в которых нужное есть.
         :returns: словарь, ключ -- индекс, значение -- список кортежей (индекс первой, последней буквы), точно не пуст.
         """
-        return self.highlightbatch(self.indexes())
+        to_highlight = self.highlightbatch(self.indexes())
+        to_highlight = dict(item for item in to_highlight.items() if item[1])
+        return to_highlight
 
     def pretty_print(self) -> dict:
         """
